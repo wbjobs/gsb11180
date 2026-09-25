@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>大文件 SHA-256 计算器</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app">
+    <header class="app__header">
+      <h1>大文件 SHA-256 计算器</h1>
+      <p class="subtitle">本地分片读取并计算整个文件的 SHA-256。<strong>不上传、不解析、不存储</strong>，一切只发生在你的浏览器里。</p>
+    </header>
+
+    <section class="card">
+      <div class="row">
+        <label class="file-picker">
+          <input type="file" id="file-input" />
+          <span id="file-label">选择文件（支持 500MB–2GB 及任意大小）</span>
+        </label>
+      </div>
+
+      <div class="row file-meta" id="file-meta" hidden>
+        <div class="file-meta__name" id="file-name"></div>
+        <div class="file-meta__size" id="file-size"></div>
+      </div>
+
+      <div class="row controls">
+        <label class="chunk-control">
+          分片大小
+          <select id="chunk-size">
+            <option value="1048576">1 MiB</option>
+            <option value="2097152">2 MiB</option>
+            <option value="4194304" selected>4 MiB</option>
+            <option value="8388608">8 MiB</option>
+            <option value="16777216">16 MiB</option>
+            <option value="33554432">32 MiB</option>
+            <option value="67108864">64 MiB</option>
+          </select>
+        </label>
+
+        <div class="buttons">
+          <button id="btn-start" class="btn btn--primary" disabled>开始</button>
+          <button id="btn-pause" class="btn" disabled>暂停</button>
+          <button id="btn-resume" class="btn" disabled>继续</button>
+          <button id="btn-cancel" class="btn btn--danger" disabled>取消</button>
+        </div>
+      </div>
+
+      <div class="status-banner" id="error-banner" hidden></div>
+
+      <section class="progress-section">
+        <div class="progress-head">
+          <span id="status-text">等待开始</span>
+          <span id="percent-text">0.00%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+
+        <dl class="metrics">
+          <div class="metric"><dt>已读字节</dt><dd id="m-bytes">0 / 0 B</dd></div>
+          <div class="metric"><dt>实时速度</dt><dd id="m-speed">–</dd></div>
+          <div class="metric"><dt>已用时间</dt><dd id="m-elapsed">–</dd></div>
+          <div class="metric"><dt>预计剩余</dt><dd id="m-eta">–</dd></div>
+        </dl>
+
+        <div class="result" id="result-box" hidden>
+          <div class="result__label">SHA-256 <span id="result-via" class="result__via"></span></div>
+          <div class="result__row">
+            <code id="result-hash" class="result__hash"></code>
+            <button id="btn-copy" class="btn btn--small">复制</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="health">
+        <h2>主线程健康</h2>
+        <div class="health__grid">
+          <div class="health__item">FPS <span id="h-fps">–</span></div>
+          <div class="health__item">长任务次数 <span id="h-longtasks">0</span></div>
+          <div class="health__item">最长任务 <span id="h-longtask-max">0 ms</span></div>
+          <div class="health__item">哈希线程 <span id="h-worker">Worker</span></div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
